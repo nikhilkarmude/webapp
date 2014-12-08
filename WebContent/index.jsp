@@ -1,0 +1,95 @@
+<%@page import="java.util.HashMap"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@page import="controller.MaxRecord"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.DateFormat"%>
+<%@page import="java.util.Date"%>
+<%@page import="controller.SelectLists"%>
+<%@page import="controller.insertGroupSelection"%>
+<%@page import="controller.DataBaseConnection"%>
+<%@page import="controller.TotalCountSection"%>
+<%@page import="controller.namesInGroup"%>
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
+<%@page import="controller.selectCount"%>
+<%@page import="java.util.ArrayList"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<%
+	if (request.getParameter("Save") != null) {
+		if (Boolean.parseBoolean("" + request.getParameter("Save"))) {
+			String ids = new MaxRecord().getMaxIDRecord();
+			ids = new MaxRecord().getMaxIDRecord();
+			out.print("<script type='text/javascript'>");
+			out.print("alert(\"Saved Successfully !!!! new Max Mail Id is :"
+					+ ids + "\");");
+			out.print("	</script>");
+		}
+	}
+	HashMap<String, Integer> postion_count = new HashMap<String, Integer>();
+	ArrayList<String> PostionSelected = new ArrayList<String>();
+	ArrayList<String> MaterialName = new ArrayList<String>();
+	ArrayList<String> MaterialNameselected = new ArrayList<String>();
+	HashMap<String, ArrayList<String>> patronID = new HashMap<String, ArrayList<String>>();
+	Date date = new Date();
+	DateFormat dateFormat;
+	if (session.isNew()) {	
+		application.setAttribute("reset", false);
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a");
+		session.setAttribute("posstionCode_counter_list", postion_count);
+		session.setAttribute("PositionSelected", PostionSelected);
+		session.setAttribute("MaterialSelected", MaterialNameselected);
+		session.setAttribute("Date", dateFormat.format(date));
+		session.setAttribute("LastMaxID",
+				new MaxRecord().getMaxIDRecord());
+	}
+	if (application.getAttribute("UserLogined") == null) {
+		application.setAttribute("UserLogined", 0);
+		application.setAttribute("userID", "");
+		application.setAttribute("reset", false);
+	}
+%>
+
+<head>
+<link rel="stylesheet" type="text/css" href="css/generic.css" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/MyStyles.css">
+
+<script type='text/javascript' src='js/select.js'></script>
+<script type="text/javascript" src="js/CollapsibleLists.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Welcome To Expert-net Contact DB Project</title>
+</head>
+<body>
+
+	<div class="center">
+	<h1>User Index</h1>	
+	<br><ul id="materials">
+	<li>
+	
+	<u><a id="createMailList" href="init.do">Create New Mailing</a></u>
+	<%
+		if (Integer.parseInt("" + application.getAttribute("UserLogined")) == 1&&!application.getAttribute("userID").equals(session.getId())){
+	%>
+	<br>
+	
+			<form id="terminate" action="Invalidate.do" method="get">
+				<input id="Submitbtn" type="submit"
+					value="click to terminate other user sessions"\>
+			</form>
+		
+		
+		<%
+		}
+	%>
+		<br>
+</li>
+<li>
+</li>
+</ul>
+</div>
+
+</body>
+</html>
